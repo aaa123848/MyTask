@@ -1,0 +1,22 @@
+1. 
+使用index 增加讀取速度。 例如為欄位建立 二元樹，當對欄位進行搜索時(ex. select * from users where id =3) 會進行二元樹搜尋，增加搜尋速度。
+
+值得另外一提的是，postgres 和mysql 在index 上的差別。 mysql 的index 分為 cluster and non-cluster，其中cluster 為 primary key，代表了每一個raw 的真正儲存順序。 也就是說 cluster 的最末點直接就是每一個raw 的資料本身。 所以每一次寫入時，都會根據primary 進行重新排序。 
+
+而postgres 並沒有cluster 與 non-cluster 的差別，每個index 的最末點都是存對應的記憶體位置。 postgres 的寫入方式就是sequence 不斷堆疊，所以postgres 的寫入比較快。 但是，只要買多一個index, 每一次寫入要改變的樹就變多，導致寫入變慢。
+
+2. 
+根據欄位進行拆表，例如users 表中原本有 job, company, years, pay...等工作相關的資料，可以另外開一張表以外鍵連接，壓縮整個表的大小。 可以提升資料庫跟硬碟的io效率。 同樣的也可以根據raw 進行拆表。
+
+3. 
+利用主從 或讀寫分離 減輕單一資料庫的壓力。
+
+
+
+後端服務: 
+
+1. 
+減少不必要欄位的讀取，減低資料傳輸的大小，增加速度。
+
+2. 
+將運算、排序等邏輯判斷放在服務端，減輕資料庫負擔
