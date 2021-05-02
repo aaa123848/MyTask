@@ -17,7 +17,7 @@ def get_data(url, limit):
     tags = soup.find_all(class_="td DescriptionCell")
 
     if limit == None:
-        limit = len(tags)
+        limit = 20
 
     for t in tags:
         res.append(t.find('a').string)
